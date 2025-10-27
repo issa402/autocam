@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Automated photo management system for sports photographers",
   "private": true,
+  "engines": {
+    "node": ">=18 <21"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
