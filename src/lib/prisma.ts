@@ -13,7 +13,7 @@
  * - In development: Stores instance in global object to survive hot reloads
  */
 
-'use server';
+import 'server-only';
 
 import { PrismaClient } from '@prisma/client';
 

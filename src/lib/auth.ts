@@ -18,7 +18,7 @@
  * - Refresh tokens for long-term sessions
  */
 
-'use server';
+import 'server-only';
 
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';

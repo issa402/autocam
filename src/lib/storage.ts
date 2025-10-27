@@ -16,7 +16,7 @@
  * - Row-level security support
  */
 
-'use server';
+import 'server-only';
 
 import { createClient } from '@supabase/supabase-js';
 
