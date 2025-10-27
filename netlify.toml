@@ -12,6 +12,10 @@
   # Functions directory for serverless functions (if needed)
   functions = "netlify/functions"
 
+# Build environment variables (these are used during build time)
+[build.environment]
+  NODE_ENV = "production"
+
 # Environment variables for production
 [env.production]
   # These should be set in Netlify dashboard
