@@ -16,10 +16,6 @@
 [build.environment]
   NODE_ENV = "production"
 
-# Disable secrets scanning for false positives (these are just env var names, not actual secrets)
-[build]
-  ignore_env_vars = ["JWT_SECRET", "NODE_ENV", "AI_WORKER_URL", "NEXT_PUBLIC_WS_URL", "NEXT_PUBLIC_SUPABASE_URL", "NEXT_PUBLIC_SUPABASE_ANON_KEY"]
-
 # Environment variables for production
 [env.production]
   # These should be set in Netlify dashboard
