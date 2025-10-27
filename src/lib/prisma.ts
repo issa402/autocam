@@ -1,17 +1,19 @@
 /**
  * Prisma Client Singleton
- * 
+ *
  * This file creates a single instance of Prisma Client that's reused across the application.
- * 
+ *
  * Why a singleton?
  * - Prevents multiple database connections in development (hot reload creates new instances)
  * - Improves performance
  * - Prevents "too many connections" errors
- * 
+ *
  * How it works:
  * - In production: Creates one instance
  * - In development: Stores instance in global object to survive hot reloads
  */
+
+'use server';
 
 import { PrismaClient } from '@prisma/client';
 

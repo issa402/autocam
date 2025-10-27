@@ -1,22 +1,24 @@
 /**
  * Authentication Service
- * 
+ *
  * This service handles user authentication:
  * - Password hashing
  * - JWT token generation and verification
  * - User session management
- * 
+ *
  * Why JWT?
  * - Stateless (no server-side session storage)
  * - Scalable (works across multiple servers)
  * - Secure (signed with secret key)
  * - Contains user info (no database lookup needed)
- * 
+ *
  * Security measures:
  * - Passwords hashed with bcrypt (10 rounds)
  * - JWT tokens expire after 15 minutes
  * - Refresh tokens for long-term sessions
  */
+
+'use server';
 
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
