@@ -12,12 +12,6 @@
   # Functions directory for serverless functions (if needed)
   functions = "netlify/functions"
 
-# Disable the Next.js plugin to use our custom build command
-[[plugins]]
-  package = "@netlify/plugin-nextjs"
-  [plugins.inputs]
-    skip = true
-
 # Environment variables for production
 [env.production]
   # These should be set in Netlify dashboard
