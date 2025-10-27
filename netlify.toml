@@ -33,7 +33,6 @@
   from = "/*"
   to = "/index.html"
   status = 200
-  condition = {Status = 404, !has = "Content-Type|application/*"}
 
 # Headers for security and performance
 [[headers]]
