@@ -2,9 +2,6 @@
 # This file configures how Netlify builds and deploys the AutoCam application
 
 [build]
-  # Command to build the Next.js application
-  command = "npm install && npm run build"
-
   # Directory containing the built application
   # Next.js outputs to .next directory
   publish = ".next"
