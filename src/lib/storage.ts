@@ -21,10 +21,14 @@ import { createClient } from '@supabase/supabase-js';
 /**
  * Initialize Supabase Client
  */
-const supabase = createClient(
-  process.env.SUPABASE_URL || '',
-  process.env.SUPABASE_SERVICE_ROLE_KEY || ''
-);
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+if (!supabaseUrl || !supabaseKey) {
+  throw new Error('Missing Supabase environment variables: NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY');
+}
+
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 // Bucket name from environment
 const BUCKET_NAME = process.env.SUPABASE_STORAGE_BUCKET || 'photos';
