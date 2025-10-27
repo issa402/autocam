@@ -17,6 +17,8 @@
   NODE_ENV = "production"
   NODE_VERSION = "18"
   NPM_CONFIG_PRODUCTION = "false"
+  # Omit public keys from secrets scan to avoid false positives
+  SECRETS_SCAN_OMIT_KEYS = "NEXT_PUBLIC_SUPABASE_ANON_KEY,NEXT_PUBLIC_SUPABASE_URL,NEXT_PUBLIC_WS_URL"
 
 # Environment variables for production
 [env.production]
