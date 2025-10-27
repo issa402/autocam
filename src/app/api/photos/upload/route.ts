@@ -153,7 +153,7 @@ export async function POST(request: NextRequest) {
 
     // CRITICAL: Call AI worker directly (don't use Redis queue)
     // This ensures photos are analyzed immediately without depending on Redis
-    const aiWorkerUrl = process.env.AI_WORKER_URL || 'http://localhost:8001';
+    const aiWorkerUrl = process.env['AI_WORKER_URL'] || 'http://localhost:8001';
     console.log(`🚀 Calling AI worker at ${aiWorkerUrl}/analyze for photo ${photo.id}`);
 
     // Use AbortController for timeout

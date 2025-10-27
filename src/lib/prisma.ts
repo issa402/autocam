@@ -30,11 +30,11 @@ declare global {
  * - log: Logs database queries in development for debugging
  */
 const prisma = global.prisma || new PrismaClient({
-  log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
+  log: (process.env['NODE_ENV'] === 'development') ? ['query', 'error', 'warn'] : ['error'],
 });
 
 // In development, store instance in global to survive hot reloads
-if (process.env.NODE_ENV !== 'production') {
+if (process.env['NODE_ENV'] !== 'production') {
   global.prisma = prisma;
 }
 

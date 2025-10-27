@@ -38,9 +38,9 @@ export async function GET(request: NextRequest) {
     // Exchange code for tokens
     const tokenResponse = await axios.post('https://oauth2.googleapis.com/token', {
       code,
-      client_id: process.env.GOOGLE_CLIENT_ID,
-      client_secret: process.env.GOOGLE_CLIENT_SECRET,
-      redirect_uri: `${process.env.NEXT_PUBLIC_APP_URL}/api/oauth/google-photos/callback`,
+      client_id: process.env['GOOGLE_CLIENT_ID'],
+      client_secret: process.env['GOOGLE_CLIENT_SECRET'],
+      redirect_uri: `${process.env['NEXT_PUBLIC_APP_URL']}/api/oauth/google-photos/callback`,
       grant_type: 'authorization_code',
     });
 

@@ -80,7 +80,7 @@ export async function POST(request: NextRequest) {
     console.log(`🚀 Manually triggering AI analysis for ${photos.length} photos`);
 
     // Trigger AI analysis for each photo
-    const aiWorkerUrl = process.env.AI_WORKER_URL || 'http://localhost:8001';
+    const aiWorkerUrl = process.env['AI_WORKER_URL'] || 'http://localhost:8001';
     const results = [];
 
     for (const photo of photos) {
