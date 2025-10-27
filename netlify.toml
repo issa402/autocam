@@ -2,12 +2,21 @@
 # This file configures how Netlify builds and deploys the AutoCam application
 
 [build]
+  # Command to build the Next.js application
+  command = "npm install && npm run build"
+
   # Directory containing the built application
   # Next.js outputs to .next directory
   publish = ".next"
 
   # Functions directory for serverless functions (if needed)
   functions = "netlify/functions"
+
+# Disable the Next.js plugin to use our custom build command
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+  [plugins.inputs]
+    skip = true
 
 # Environment variables for production
 [env.production]
