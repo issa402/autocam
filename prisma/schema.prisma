@@ -1,0 +1,222 @@
+/**
+ * Prisma Database Schema
+ * 
+ * This defines the database structure for AutoCam.
+ * Prisma is an ORM (Object-Relational Mapping) tool that:
+ * - Generates type-safe database client
+ * - Handles migrations
+ * - Provides query builder
+ * 
+ * Why Prisma?
+ * - Type safety (TypeScript integration)
+ * - Easy migrations
+ * - Great developer experience
+ * - Automatic query optimization
+ */
+
+// Prisma client generator - creates TypeScript types and client
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Database connection - PostgreSQL
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/**
+ * User Model
+ * Represents photographers using the system
+ */
+model User {
+  id        String   @id @default(cuid()) // Unique ID (cuid = collision-resistant unique ID)
+  email     String   @unique // Email must be unique
+  name      String? // Optional name
+  password  String // Hashed password (using bcrypt)
+  
+  // Relationships
+  projects  Project[] // One user can have many projects
+  oauthTokens OAuthToken[] // OAuth tokens for Google Drive, Facebook, etc.
+  exportJobs ExportJob[] // Export history
+  
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  // Index for faster email lookups
+  @@index([email])
+}
+
+/**
+ * Project Model
+ * Represents a photo session (e.g., "Basketball Game 2024")
+ * Groups photos together for organization
+ */
+model Project {
+  id          String   @id @default(cuid())
+  name        String // Project name (e.g., "Basketball Championship")
+  description String? // Optional description
+  
+  // Foreign key to User
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Relationships
+  photos      Photo[] // One project has many photos
+  exportJobs  ExportJob[] // Export history for this project
+  
+  // Status
+  status      String   @default("active") // active, archived
+  
+  // Timestamps
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Indexes for faster queries
+  @@index([userId])
+  @@index([status])
+}
+
+/**
+ * Photo Model
+ * Represents individual photos uploaded by photographers
+ * Stores metadata, AI analysis results, and selection state
+ */
+model Photo {
+  id                String   @id @default(cuid())
+  
+  // Foreign key to Project
+  projectId         String
+  project           Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  
+  // File information
+  filename          String // Original filename
+  originalUrl       String // URL to full-resolution photo in S3/R2
+  thumbnailSmallUrl String? // 400px wide thumbnail
+  thumbnailMediumUrl String? // 1200px wide thumbnail
+  thumbnailLargeUrl String? // 2400px wide thumbnail
+  fileSize          BigInt // File size in bytes
+  mimeType          String // image/jpeg, image/png, etc.
+  width             Int? // Image width in pixels
+  height            Int? // Image height in pixels
+  
+  // AI Analysis Results
+  // These are populated by the AI worker after upload
+  blurScore         Float? // Laplacian variance score (higher = sharper)
+  isBlurry          Boolean  @default(false) // True if photo is blurry
+  qualityScore      Float? // Overall quality score (0-100)
+  hasFaces          Boolean  @default(false) // True if faces detected
+  faceCount         Int      @default(0) // Number of faces detected
+  exposureScore     Float? // Exposure quality (0-100)
+
+  // Photo Set Assignment (CRITICAL FOR 3-SET WORKFLOW!)
+  // PENDING = Just uploaded, waiting for AI analysis
+  // BLURRY = AI marked as blurry (user can review and rescue good ones)
+  // CLEAN = AI marked as clean/sharp (user selects keepers from here)
+  // FINAL = User selected from either BLURRY or CLEAN (ready for upload)
+  photoSet          PhotoSet @default(PENDING)
+
+  // Selection State
+  // Updated when photographer selects photos
+  isSelected        Boolean  @default(false) // True if photographer selected this photo
+  starRating        Int? // 1-5 star rating (optional)
+  
+  // Metadata (EXIF data from camera)
+  // Stored as JSON for flexibility
+  // Example: { "camera": "Canon EOS R5", "lens": "RF 70-200mm", "iso": 3200, "shutterSpeed": "1/1000", "aperture": "f/2.8" }
+  metadata          Json?
+  
+  // Timestamps
+  createdAt         DateTime @default(now()) // When photo was uploaded
+  updatedAt         DateTime @updatedAt // When photo was last updated
+  analyzedAt        DateTime? // When AI analysis completed
+  
+  // Indexes for faster queries
+  @@index([projectId]) // Find all photos in a project
+  @@index([photoSet]) // Filter by photo set (CRITICAL!)
+  @@index([isBlurry]) // Filter by blur status
+  @@index([isSelected]) // Filter by selection status
+  @@index([qualityScore]) // Sort by quality
+}
+
+/**
+ * PhotoSet Enum
+ * Defines which set a photo belongs to in the 3-set workflow
+ *
+ * WORKFLOW:
+ * 1. Upload → PENDING
+ * 2. AI analyzes → BLURRY or CLEAN
+ * 3. User selects from BLURRY or CLEAN → FINAL
+ * 4. Export uploads all photos in FINAL set
+ */
+enum PhotoSet {
+  PENDING // Just uploaded, waiting for AI analysis
+  BLURRY  // AI detected as blurry (user can review and rescue)
+  CLEAN   // AI detected as clean/sharp (user selects keepers)
+  FINAL   // User selected (ready for upload)
+}
+
+/**
+ * ExportJob Model
+ * Represents an export operation (uploading selected photos to Google Drive, Facebook, etc.)
+ * Tracks progress and status of exports
+ */
+model ExportJob {
+  id          String   @id @default(cuid())
+  
+  // Foreign keys
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  projectId   String
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  
+  // Export configuration
+  destination String // "google_drive", "facebook", "dropbox", "download"
+  config      Json // Destination-specific config (e.g., { "folderId": "abc123" } for Google Drive)
+  photoIds    String[] // Array of photo IDs to export
+  
+  // Status tracking
+  status      String   @default("pending") // pending, processing, completed, failed
+  progress    Int      @default(0) // 0-100 percentage
+  errorMessage String? // Error message if failed
+  
+  // Timestamps
+  createdAt   DateTime @default(now())
+  completedAt DateTime? // When export finished
+  
+  // Indexes
+  @@index([userId])
+  @@index([projectId])
+  @@index([status])
+}
+
+/**
+ * OAuthToken Model
+ * Stores OAuth access tokens for third-party integrations
+ * Tokens are encrypted before storage for security
+ */
+model OAuthToken {
+  id           String   @id @default(cuid())
+  
+  // Foreign key
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // OAuth provider
+  provider     String // "google", "facebook", "dropbox"
+  
+  // Tokens (should be encrypted in production)
+  accessToken  String // OAuth access token
+  refreshToken String? // OAuth refresh token (for renewing access)
+  expiresAt    DateTime? // When access token expires
+  
+  // Timestamps
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  
+  // Indexes
+  @@index([userId, provider]) // Find tokens for a user and provider
+  @@unique([userId, provider]) // One token per user per provider
+}
+

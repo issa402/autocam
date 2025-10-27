@@ -1,0 +1,215 @@
+/**
+ * Global CSS Styles
+ * 
+ * This file contains:
+ * 1. Tailwind CSS imports
+ * 2. CSS custom properties (variables) for theming
+ * 3. Global styles
+ * 
+ * Why CSS variables?
+ * - Easy theme switching (light/dark mode)
+ * - Consistent colors across the app
+ * - Can be changed dynamically with JavaScript
+ */
+
+/* Import Tailwind CSS layers */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Base layer - applies to all elements */
+@layer base {
+  /**
+   * CSS Custom Properties (Variables)
+   * These define the color scheme for the entire application
+   * Values are in HSL format (Hue, Saturation, Lightness)
+   */
+  :root {
+    /* Background colors */
+    --background: 0 0% 100%; /* White */
+    --foreground: 222.2 84% 4.9%; /* Almost black */
+
+    /* Card colors */
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    /* Popover colors */
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    /* Primary brand colors */
+    --primary: 221.2 83.2% 53.3%; /* Blue */
+    --primary-foreground: 210 40% 98%;
+
+    /* Secondary colors */
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    /* Muted colors (for less important elements) */
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    /* Accent colors */
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    /* Destructive/error colors */
+    --destructive: 0 84.2% 60.2%; /* Red */
+    --destructive-foreground: 210 40% 98%;
+
+    /* Border colors */
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 221.2 83.2% 53.3%;
+
+    /* Border radius */
+    --radius: 0.5rem;
+  }
+
+  /**
+   * Dark mode colors
+   * Applied when .dark class is on html element
+   */
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 224.3 76.3% 48%;
+  }
+}
+
+/* Base styles for all elements */
+@layer base {
+  * {
+    /* Apply border color to all elements */
+    @apply border-border;
+  }
+  
+  body {
+    /* Set background and text colors */
+    @apply bg-background text-foreground;
+    /* Use system font stack for better performance */
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
+    /* Smooth font rendering */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/**
+ * Custom utility classes
+ * These are reusable classes for common patterns
+ */
+@layer utilities {
+  /* Hide scrollbar but keep functionality */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Custom focus ring for keyboard navigation */
+  .focus-ring {
+    @apply focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2;
+  }
+}
+
+/**
+ * Component-specific styles
+ */
+
+/* Photo grid container */
+.photo-grid {
+  /* Use CSS Grid for responsive layout */
+  display: grid;
+  gap: 1rem;
+  /* Responsive columns based on screen size */
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}
+
+/* Photo card styles */
+.photo-card {
+  /* Aspect ratio 1:1 (square) */
+  aspect-ratio: 1 / 1;
+  /* Smooth transitions */
+  transition: all 0.2s ease-in-out;
+}
+
+.photo-card:hover {
+  /* Slight scale on hover */
+  transform: scale(1.05);
+}
+
+/* Selected photo indicator */
+.photo-selected {
+  /* Green border for selected photos */
+  @apply ring-4 ring-green-500;
+}
+
+/* Active photo indicator (current keyboard focus) */
+.photo-active {
+  /* Blue border for active photo */
+  @apply ring-4 ring-blue-500;
+}
+
+/* Blurry photo indicator */
+.photo-blurry {
+  /* Red tint for blurry photos */
+  @apply opacity-60;
+}
+
+/**
+ * Loading spinner animation
+ */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+/**
+ * Toast notification styles
+ */
+.toast {
+  @apply fixed bottom-4 right-4 bg-card text-card-foreground p-4 rounded-lg shadow-lg;
+  animation: slide-in-bottom 0.3s ease-out;
+}
+
+/**
+ * Keyboard shortcut badge styles
+ */
+.kbd {
+  @apply inline-flex items-center justify-center px-2 py-1 text-xs font-mono bg-muted text-muted-foreground rounded border border-border;
+}
+

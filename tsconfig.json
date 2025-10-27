@@ -1,0 +1,52 @@
+{
+  "compilerOptions": {
+    // Target ES2017 for modern JavaScript features
+    "target": "ES2017",
+    // Use ESNext for latest JavaScript features
+    "lib": ["dom", "dom.iterable", "esnext"],
+    // Allow JavaScript files to be compiled
+    "allowJs": true,
+    // Skip type checking of declaration files for faster compilation
+    "skipLibCheck": true,
+    // Enable strict type checking for better code quality
+    "strict": true,
+    // Disallow implicit any types
+    "noImplicitAny": true,
+    // Force consistent casing in file names
+    "forceConsistentCasingInFileNames": true,
+    // Don't emit output files (Next.js handles this)
+    "noEmit": true,
+    // Enable ES module interop for better compatibility
+    "esModuleInterop": true,
+    // Use Node module resolution
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    // Allow importing JSON files
+    "resolveJsonModule": true,
+    // Treat each file as a separate module
+    "isolatedModules": true,
+    // Use JSX with React
+    "jsx": "preserve",
+    // Enable incremental compilation for faster builds
+    "incremental": true,
+    // Configure path aliases for cleaner imports
+    "paths": {
+      "@/*": ["./src/*"],
+      "@/components/*": ["./src/components/*"],
+      "@/lib/*": ["./src/lib/*"],
+      "@/hooks/*": ["./src/hooks/*"],
+      "@/stores/*": ["./src/stores/*"],
+      "@/types/*": ["./src/types/*"]
+    },
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
+  },
+  // Include these files in compilation
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  // Exclude these directories from compilation
+  "exclude": ["node_modules"]
+}
+

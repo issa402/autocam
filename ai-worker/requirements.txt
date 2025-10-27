@@ -1,0 +1,51 @@
+# Python AI Worker Dependencies
+# 
+# This file lists all Python packages needed for the AI worker service
+
+# FastAPI - Modern web framework for building APIs
+# Why FastAPI? Fast, automatic API docs, type hints, async support
+fastapi==0.109.0
+
+# Uvicorn - ASGI server to run FastAPI
+uvicorn[standard]==0.27.0
+
+# OpenCV - Computer vision library for blur detection
+# Why OpenCV? Industry standard, fast, reliable
+opencv-python==4.9.0.80
+
+# NumPy - Numerical computing (required by OpenCV)
+numpy==1.26.3
+
+# Pillow - Image processing library
+# Why Pillow? Easy image loading, format conversion
+Pillow==10.2.0
+
+# Requests - HTTP library for downloading images
+requests==2.31.0
+
+# Python-dotenv - Load environment variables from .env file
+python-dotenv==1.0.0
+
+# Pydantic - Data validation using Python type hints
+pydantic==2.5.3
+
+# TensorFlow Lite (Optional - for CNN-based blur detection)
+# Uncomment if you want to use deep learning model
+# tensorflow==2.15.0
+
+# Redis - For job queue integration
+redis==5.0.1
+
+# asyncpg - Async PostgreSQL driver
+asyncpg==0.29.0
+
+# Bull (Python client) - For Bull queue integration
+# Note: We'll use Redis directly to interact with Bull queues
+
+# Real-ESRGAN - AI-powered image upscaling and deblurring
+# For high-quality deblurring of photos
+realesrgan==0.3.0
+
+# SciPy - Scientific computing (for Wiener filter deblurring)
+scipy==1.13.0
+
