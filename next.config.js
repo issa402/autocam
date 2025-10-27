@@ -48,12 +48,7 @@ const nextConfig = {
     return config;
   },
 
-  // Environment variables exposed to the browser
-  // Only variables prefixed with NEXT_PUBLIC_ are exposed
-  env: {
-    NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
-    NEXT_PUBLIC_WS_URL: process.env.NEXT_PUBLIC_WS_URL,
-  },
+
 };
 
 module.exports = nextConfig;

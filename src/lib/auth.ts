@@ -18,7 +18,7 @@
  * - Refresh tokens for long-term sessions
  */
 
-'use server';
+import 'server-only';
 
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
@@ -28,9 +28,9 @@ import { User } from '@/types';
  * JWT secret key from environment
  * IMPORTANT: Change this in production!
  */
-const JWT_SECRET: string = process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-this';
-const JWT_EXPIRES_IN: string = process.env.JWT_EXPIRES_IN || '15m';
-const JWT_REFRESH_EXPIRES_IN: string = process.env.JWT_REFRESH_EXPIRES_IN || '7d';
+const JWT_SECRET: string = process.env['JWT_SECRET'] || 'your-super-secret-jwt-key-change-this';
+const JWT_EXPIRES_IN: string = process.env['JWT_EXPIRES_IN'] || '15m';
+const JWT_REFRESH_EXPIRES_IN: string = process.env['JWT_REFRESH_EXPIRES_IN'] || '7d';
 
 /**
  * JWT payload structure

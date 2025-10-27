@@ -35,7 +35,7 @@ import Redis from 'ioredis';
  * - Job results
  */
 const redisConfig = {
-  redis: process.env.REDIS_URL || 'redis://localhost:6379',
+  redis: process.env['REDIS_URL'] || 'redis://localhost:6379',
   // Connection options
   maxRetriesPerRequest: null, // Required for Bull
   enableReadyCheck: false,

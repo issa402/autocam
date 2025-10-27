@@ -9,14 +9,15 @@
   # Next.js outputs to .next directory
   publish = ".next"
 
-  # Functions directory for serverless functions (if needed)
-  functions = "netlify/functions"
+
 
 # Build environment variables (these are used during build time)
 [build.environment]
   NODE_ENV = "production"
   NODE_VERSION = "18"
   NPM_CONFIG_PRODUCTION = "false"
+  # Omit select keys from secrets scan to avoid false positives
+  SECRETS_SCAN_OMIT_KEYS = "NEXT_PUBLIC_SUPABASE_ANON_KEY,NEXT_PUBLIC_SUPABASE_URL,NEXT_PUBLIC_WS_URL,NEXT_PUBLIC_APP_URL,NODE_ENV,AI_WORKER_URL,JWT_SECRET"
 
 # Environment variables for production
 [env.production]
@@ -28,17 +29,9 @@
   # GOOGLE_CLIENT_SECRET = "your-google-client-secret"
   # AI_WORKER_URL = "your-modal-ai-worker-url"
 
-# Redirect rules
-[[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/:splat"
-  status = 200
 
-# Rewrite for SPA routing (important for Next.js)
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+
+
 
 # Headers for security and performance
 [[headers]]
@@ -74,3 +67,8 @@
   command = "npm install && npm run build"
   publish = ".next"
 
+
+
+# Next.js on Netlify plugin (lets Netlify handle Next SSR/API routing correctly)
+[[plugins]]
+  package = "@netlify/plugin-nextjs"

@@ -38,8 +38,8 @@ export async function GET(request: NextRequest) {
     ].join(' ');
 
     const params = new URLSearchParams({
-      client_id: process.env.GOOGLE_CLIENT_ID || '',
-      redirect_uri: `${process.env.NEXT_PUBLIC_APP_URL}/api/oauth/google-photos/callback`,
+      client_id: process.env['GOOGLE_CLIENT_ID'] || '',
+      redirect_uri: `${process.env['NEXT_PUBLIC_APP_URL']}/api/oauth/google-photos/callback`,
       response_type: 'code',
       scope: scopes,
       access_type: 'offline',
