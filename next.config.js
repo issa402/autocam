@@ -34,15 +34,7 @@ const nextConfig = {
     ],
   },
 
-  // API route configuration
-  // Increase body size limit to handle large photo uploads
-  api: {
-    bodyParser: {
-      sizeLimit: '100mb', // Allow up to 100MB uploads
-    },
-    // Disable response size limit for large photo downloads
-    responseLimit: false,
-  },
+
 
   // Webpack configuration
   webpack: (config, { isServer }) => {

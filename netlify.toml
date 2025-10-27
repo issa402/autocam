@@ -3,12 +3,12 @@
 
 [build]
   # Command to build the Next.js application
-  command = "npm run build"
-  
+  command = "npm ci && npm run build"
+
   # Directory containing the built application
   # Next.js outputs to .next directory
   publish = ".next"
-  
+
   # Functions directory for serverless functions (if needed)
   functions = "netlify/functions"
 
